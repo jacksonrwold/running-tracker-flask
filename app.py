@@ -85,6 +85,9 @@ def single_run(id):
         sql = """ DELETE FROM run WHERE id=? """
 
         conn.execute(sql, (id,))
+        conn.commit()
+
+        return f"Run with ID: {id} was deleted", 200
             
 
 
