@@ -4,7 +4,7 @@ import sqlite3
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={"/runs": {"origins": "*"}})
 
 def db_connection():
     conn = None
@@ -29,9 +29,10 @@ def runs():
             return jsonify(runs)
     
     if request.method == 'POST':
-        new_time = request.form['time']
-        new_distance = request.form['distance']
-        new_calories = request.form['calories']
+        json = request.get_json()
+        new_time = json['time']
+        new_distance = json['distance']
+        new_calories = json['calories']
 
         sql = """ INSERT INTO run (time, distance, calories)
                   VALUES (?, ?, ?)      """
