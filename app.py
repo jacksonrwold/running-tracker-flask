@@ -49,16 +49,17 @@ def single_run(id):
 
     if request.method == 'GET':
         cursor = conn.execute(""" SELECT * FROM run WHERE id=? """, (id,))
-
+        
         checkIfValid = cursor.fetchall()
         for x in checkIfValid:
             checkIfValid = x
         if checkIfValid is not None:
-            return jsonify(checkIfValid), 200
+            run = [
+                dict(id=checkIfValid[0], time=checkIfValid[1], distance=checkIfValid[2], calories=checkIfValid[3])
+            ]
+            return jsonify(run), 200
         else:
             return "Run with that ID does not exist", 404
-
-        return jsonify(cursor.fetchall()), 200
     
     if request.method == 'PUT':
         sql = """ UPDATE run
