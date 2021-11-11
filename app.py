@@ -63,23 +63,24 @@ def single_run(id):
     
     if request.method == 'PUT':
         sql = """ UPDATE run
-                SET time = ?
-                    distance = ?
+                SET time = ?,
+                    distance = ?,
                     calories = ?
                 WHERE id=? """
 
-        time = request.form['time']
-        distance = request.form['distance']
-        calories = request.form['calories']
+        json = request.get_json()
+        new_time = json['time']
+        new_distance = json['distance']
+        new_calories = json['calories']
 
         updated_run = {
             'id': id,
-            'time': time,
-            'distance': distance,
-            'calories': calories
+            'time': new_time,
+            'distance': new_distance,
+            'calories': new_calories
         }
 
-        conn.execute(sql, (time, distance, calories, id))
+        conn.execute(sql, (new_time, new_distance, new_calories, id))
         conn.commit()
 
         return jsonify(updated_run)
